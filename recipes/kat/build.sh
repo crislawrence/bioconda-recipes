@@ -1,34 +1,20 @@
 #!/bin/sh
-
 set -x -e
 
-export INCLUDE_PATH="${PREFIX}/include"
-export LIBRARY_PATH="${PREFIX}/lib"
-export LD_LIBRARY_PATH="${PREFIX}/lib"
+mkdir -p ${PREFIX}/bin
 
-export BOOST_INCLUDE_DIR=${PREFIX}/include
-export BOOST_LIBRARY_DIR=${PREFIX}/lib
-export LIBS='-lboost_system -lboost_program_options -lboost_filesystem -lboost_timer'
-
-export CXXFLAGS="-DUSE_BOOST -I${BOOST_INCLUDE_DIR} -L${BOOST_LIBRARY_DIR}"
-export LDFLAGS="-L${BOOST_LIBRARY_DIR} -lboost_filesystem -lboost_system"
-
-# fix automake
-sed -i.bak '1 s|^.*$|#!/usr/bin/env perl|g' $PREFIX/bin/aclocal
-sed -i.bak '1 s|^.*$|#!/usr/bin/env perl|g' $PREFIX/bin/automake
-
-# fix autoconf
-sed -i.bak '1 s|^.*$|#!/usr/bin/env perl|g' $PREFIX/bin/autom4te
-sed -i.bak '1 s|^.*$|#!/usr/bin/env perl|g' $PREFIX/bin/autoheader
-sed -i.bak '1 s|^.*$|#!/usr/bin/env perl|g' $PREFIX/bin/autoreconf
-sed -i.bak '1 s|^.*$|#!/usr/bin/env perl|g' $PREFIX/bin/ifnames
-sed -i.bak '1 s|^.*$|#!/usr/bin/env perl|g' $PREFIX/bin/autoscan
-sed -i.bak '1 s|^.*$|#!/usr/bin/env perl|g' $PREFIX/bin/autoupdate
-
+#importing matplotlib fails, likely due to X
+sed -i.bak "124d" configure.ac
 
 ./autogen.sh
-./configure --prefix=$PREFIX \
-	--with-boost-libdir=${PREFIX}/lib \
-	--with-boost=${PREFIX}
+export PYTHON_NOVERSION_CHECK="3.7.0"
+./configure --disable-silent-rules --disable-dependency-tracking --prefix=$PREFIX
 make
 make install
+
+# This directory isn't needed and confuses conda
+rm -rf $PREFIX/mkspecs
+
+cd ${PREFIX}/lib
+# Something is creating a symlink from ${PREFIX}/lib/\n
+find . -type l -not -name "??*" -ls -delete

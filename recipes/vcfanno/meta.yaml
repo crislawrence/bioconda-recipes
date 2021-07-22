@@ -1,14 +1,14 @@
+{% set version = '0.3.2' %}
+
 package:
   name: vcfanno
-  version: '0.1.1'
+  version: {{ version }}
 
 source:
-  fn: vcfanno_0.1.1_osx # [osx]
-  url: https://github.com/brentp/vcfanno/releases/download/v0.1.1-dev/vcfanno_osx
-  sha256: 83dc4d2c0f8f0a77eee3a27c83b4688a020bebc50be7b687d1d31382c72f3f03 # [osx]
-  fn: vcfanno_0.1.1_linux # [linux]
-  url: https://github.com/brentp/vcfanno/releases/download/v0.1.1-dev/vcfanno # [linux]
-  sha256: 14bd2405f125d098b56fa555cfab4e3c0603f01ba45885d4d317de311712bb65 # [linux]
+  url: https://github.com/brentp/vcfanno/releases/download/v{{ version }}/vcfanno_osx # [osx]
+  sha256: 990949bfd1010f077e27922374c9a9bcbc6b34a02ef9f6e3e20db88496e925ff # [osx]
+  url: https://github.com/brentp/vcfanno/releases/download/v{{ version }}/vcfanno_linux64 # [linux]
+  sha256: a3e52b72d960edfc5754c4865f168b4ad228ceebbf87f15424792b3737f54f60 # [linux]
 
 build:
   number: 0
@@ -18,6 +18,11 @@ requirements:
 test:
   commands:
     - vcfanno
+
+extra:
+  skip-lints:
+    - should_be_noarch_generic  # uses per platform binaries
+    - should_not_be_noarch_source  # uses binaries
 
 about:
   home: https://github.com/brentp/vcfanno

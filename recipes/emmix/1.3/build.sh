@@ -1,10 +1,6 @@
 #!/bin/sh
 
-mkdir -p $PREFIX/bin
-# The EMMIX download page has a separate link for this required file.
-wget --no-check-certificate https://people.smp.uq.edu.au/GeoffMcLachlan/emmix/EMMIX.max
+"${FC}" ${FFLAGS} -o EMMIX EMMIX.f
 
-gfortran -o EMMIX EMMIX.f
-mv EMMIX $PREFIX/bin
-
-
+mkdir -p "${PREFIX}/bin"
+mv EMMIX "${PREFIX}/bin/"

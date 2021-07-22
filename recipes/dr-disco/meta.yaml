@@ -1,44 +1,49 @@
+{% set version = "0.18.0" %}
+{% set sha256 = "ca4efb7a07d6a51f6218d5d160d61986b6ed23967c0609f4ea73e882a6d4b6c6" %}
+
+
+
 package:
   name: dr-disco
-  version: "0.2.0"
+  version: '{{version}}'
 
 source:
-  fn: 0.2.0.tar.gz
-  url: https://github.com/yhoogstrate/dr-disco/archive/0.2.0.tar.gz
-  sha256: 66e6dcf8cee5af4e03a392f90cda60628ea9f09290bdd4eb951cd7869b0b813e
+  url: https://github.com/yhoogstrate/dr-disco/archive/v{{version}}.tar.gz
+  sha256: '{{sha256}}'
 
 build:
-  preserve_egg_dir: True
+  noarch: python
   number: 0
-  skip: True # [not py27]
+  script: python -m pip install --no-deps --ignore-installed .
 
 requirements:
-  build:
-    - python
-    - click
-    - setuptools
-    - htseq ==0.6.1.post1
-    - pysam ==0.9.0
-    - fuma ==3.0.3
-
+  host:
+    - python <3
+    - pip
+    - numpy
+    - scipy
   run:
-    - python
+    - python <3
+    - scipy
+    - pysam
     - click
-    - htseq ==0.6.1.post1
-    - pysam ==0.9.0
-    - setuptools
-    - fuma ==3.0.3
+    - fuma
+    - HTSeq
+    - pyfaidx
+    - tqdm
 
 test:
-  # Python imports
   imports:
     - drdisco
 
   commands:
-    - dr-disco --help
-    - dr-disco --version
+    # click requires a unicode locale
+    - LANG=C.UTF-8 dr-disco --version
 
 about:
-  home: https://github.com/yhoogstrate/dr-disco/
-  license:  GNU General Public License v3 or later (GPLv3+)
-  summary: 'Dr. Disco: fusion gene breakpoint detection in total RNA-seq data'
+  home: https://github.com/yhoogstrate/dr-disco
+  license: GPL-3.0+
+  license_file: LICENSE
+  license_family: GPL
+  summary: 'Dr. Disco: fusion gene and genomic breakpoint detection in random hexamer
+    RNA-seq data'

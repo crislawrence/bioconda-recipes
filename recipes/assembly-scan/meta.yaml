@@ -1,0 +1,33 @@
+{% set name="assembly-scan" %}
+{% set version = "0.4.0" %}
+{% set sha256 = "0677e357ab49f0d2527092ca8bc6ed3a9e3e56c92e7ffca1911ea490cb5eed31" %}
+
+package:
+  name: {{ name }}
+  version: {{ version }}
+
+source:
+  url: https://github.com/rpetit3/assembly-scan/archive/v{{ version }}.tar.gz
+  sha256: {{ sha256 }}
+
+build:
+  noarch: python
+  number: 0
+
+requirements:
+  build:
+    - python >=3.6
+  run:
+    - python >=3.6
+
+test:
+  commands:
+    - assembly-scan
+    - assembly-scan --version
+    - assembly-scan -h
+
+about:
+  home: https://github.com/rpetit3/assembly-scan
+  license: MIT
+  license_file: LICENSE
+  summary: Assembly summary statistics in JSON format

@@ -1,7 +1,10 @@
 #!/bin/bash
 
+set -euxo pipefail
+
+"${PYTHON}" -m pip install . --no-deps -vv
+
 mkdir -p $PREFIX/bin/
-cp BUSCO.py $PREFIX/bin
-cp BUSCO_plot.py $PREFIX/bin
-ln -s $PREFIX/bin/BUSCO.py $PREFIX/bin/busco
-ln -s $PREFIX/bin/BUSCO_plot.py $PREFIX/bin/busco_plot
+cp bin/busco $PREFIX/bin/busco #python script
+cp scripts/generate_plot.py $PREFIX/bin/generate_plot.py
+
